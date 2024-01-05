@@ -14,7 +14,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem })=> {
             const cartItem = cartItems.find(lineItem => lineItem.product_id === product.id);
             return (
               <li key={ product.id }>
-                { product.name }
+                { product.name } - ${product.price / 100}
                 {
                   cartItem ? <button onClick={ ()=> updateLineItem(cartItem)}>Add Another</button>: <button onClick={ ()=> createLineItem(product)}>Add</button>
                 }
