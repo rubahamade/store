@@ -14,7 +14,9 @@ const App = ()=> {
   useEffect(()=> {
     const fetchData = async()=> {
       const response = await axios.get('/api/products');
+      const sortedProducts = response.data.sort((a, b) => a.name.localeCompare(b.name));
       setProducts(response.data);
+      setProducts(sortedProducts);
     };
     fetchData();
   }, []);
@@ -54,7 +56,7 @@ const App = ()=> {
       order_id: cart.id
     });
     setLineItems(lineItems.map( (lineItem) => {
-      return lineItem.id == response.data.id ? response.data: lineItem
+      return lineItem.id === response.data.id ? response.data: lineItem
     }));
   };
 
@@ -84,6 +86,11 @@ const App = ()=> {
         <Link to='/orders'>Orders ({ orders.filter((order) => {return !order.is_cart}).length })</Link>
         <Link to='/cart'>Cart ({ cartCount })</Link>
       </nav>
+
+
+
+
+
       <div>
         <Products
           products={ products }

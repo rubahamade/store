@@ -1,6 +1,10 @@
 import React from 'react';
 
 const Products = ({ products, cartItems, createLineItem, updateLineItem })=> {
+
+
+
+
   return (
     <div>
       <h2>Products</h2>
