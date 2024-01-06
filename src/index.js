@@ -60,6 +60,16 @@ const App = ()=> {
     }));
   };
 
+  const decrementQuantity = async (lineItem) => {
+    const response = await axios.put(`/api/lineItems/${lineItem.id}`, {
+      quantity: lineItem.quantity - 1,
+      order_id: cart.id
+    });
+    setLineItems(lineItems.map((lineItem) => {
+      return lineItem.id === response.data.id ? response.data : lineItem
+    }));  
+  }
+
   const updateOrder = async(order)=> {
     await axios.put(`/api/orders/${order.id}`, order);
     const response = await axios.get('/api/orders');
@@ -79,12 +89,22 @@ const App = ()=> {
     return acc += item.quantity;
   }, 0);
 
+  const cartTotal = cartItems.reduce((acc, item) => {
+    const product = products.find(p => p.id === item.product_id);
+    if (product) {
+      return acc += product.price / 100 * item.quantity;
+    } else {
+      return acc;
+    }
+  }, 0);
+
+
   return (
     <div>
       <nav>
         <Link to='/products'>Products ({ products.length })</Link>
         <Link to='/orders'>Orders ({ orders.filter((order) => {return !order.is_cart}).length })</Link>
-        <Link to='/cart'>Cart ({ cartCount })</Link>
+        <Link to='/cart'>Cart ({cartCount })</Link>
       </nav>
 
 
@@ -108,6 +128,9 @@ const App = ()=> {
           lineItems = { lineItems }
           products = { products }
           updateOrder = { updateOrder }
+          incrementQuantity = { updateLineItem }
+          decrementQuantity = { decrementQuantity }
+          cartTotal= { cartTotal }
           removeFromCart = { removeFromCart }
         />
       </div>

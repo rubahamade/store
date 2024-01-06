@@ -16,9 +16,9 @@ const Orders = ({ orders, products, lineItems })=> {
                     orderLineItems.map( lineItem => {
                       const product = products.find(product => product.id === lineItem.product_id);
                       return (
-                        <li key={ lineItem.id }>
-                          { product ? `${product.name} - Quantity: ${lineItem.quantity} ` : '' }
-                        </li>
+                          <li key={lineItem.id}>
+                            {product ? `${product.name} - Quantity: ${lineItem.quantity} ` : ''}
+                          </li>
                       );
                     })
                   }
