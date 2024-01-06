@@ -18,6 +18,7 @@ const Cart = ({ updateOrder, removeFromCart, lineItems, cart, products })=> {
           })
         }
       </ul>
+      
       {
         lineItems.filter((lineItem) => {return lineItem.order_id === cart.id }).length ? <button onClick={()=> {
           updateOrder({...cart, is_cart: false });

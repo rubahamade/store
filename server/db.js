@@ -26,11 +26,11 @@ const fetchProducts = async()=> {
 
 const createProduct = async(product)=> {
   const SQL = `
-    INSERT INTO products (id, name, price)
-    VALUES($1, $2, $3)
+    INSERT INTO products (id, name, price, description)
+    VALUES($1, $2, $3, $4)
     RETURNING *
   `;
-  const response = await client.query(SQL, [ uuidv4(), product.name, product.price]);
+  const response = await client.query(SQL, [ uuidv4(), product.name, product.price, product.description]);
   return response.rows[0];
 };
 
@@ -124,7 +124,8 @@ const seed = async()=> {
       id UUID PRIMARY KEY,
       created_at TIMESTAMP DEFAULT now(),
       name VARCHAR(100) UNIQUE NOT NULL,
-      price INTEGER NOT NULL
+      price INTEGER NOT NULL,
+      description TEXT
     );
 
     CREATE TABLE orders(
@@ -145,10 +146,10 @@ const seed = async()=> {
   `;
   await client.query(SQL);
   const [foo, bar, bazz, quq] = await Promise.all([
-    createProduct({ name: 'foo', price: 100 }),
-    createProduct({ name: 'bar', price: 200 }),
-    createProduct({ name: 'bazz', price: 300 }),
-    createProduct({ name: 'quq', price: 400 }),
+    createProduct({ name: 'foo', price: 100, description: 'text text' }),
+    createProduct({ name: 'bar', price: 200, description: 'text text' }),
+    createProduct({ name: 'bazz', price: 300, description: 'text text' }),
+    createProduct({ name: 'quq', price: 400, description: 'text text' }),
   ]);
   let orders = await fetchOrders();
   let cart = orders.find(order => order.is_cart);

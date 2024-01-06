@@ -15,6 +15,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem })=> {
             return (
               <li key={ product.id }>
                 { product.name } - ${product.price / 100}
+                <p>{product.description}</p>
                 {
                   cartItem ? <button onClick={ ()=> updateLineItem(cartItem)}>Add Another</button>: <button onClick={ ()=> createLineItem(product)}>Add</button>
                 }
