@@ -1,9 +1,7 @@
 import React from 'react';
+import CreateProductForm from './Form';
 
-const Products = ({ products, cartItems, createLineItem, updateLineItem })=> {
-
-
-
+const Products = ({ products, cartItems, createLineItem, updateLineItem, fetchProducts })=> {
 
   return (
     <div>
@@ -24,6 +22,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem })=> {
           })
         }
       </ul>
+      <CreateProductForm fetchProducts={fetchProducts} />
     </div>
   );
 };

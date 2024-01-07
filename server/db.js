@@ -24,13 +24,19 @@ const fetchProducts = async()=> {
   return response.rows;
 };
 
-const createProduct = async(product)=> {
+const createProduct = async(product, reviews=[])=> {
   const SQL = `
     INSERT INTO products (id, name, price, description)
     VALUES($1, $2, $3, $4)
     RETURNING *
   `;
-  const response = await client.query(SQL, [ uuidv4(), product.name, product.price, product.description]);
+  const id = uuidv4()
+  const response = await client.query(SQL, [ id, product.name, product.price, product.description]);
+  if (reviews.length > 0) {
+    reviews.forEach(review => {
+      createReview({ id: uuidv4(), product_id: id, txt: review.txt, rating: review.rating });
+    })
+  }
   return response.rows[0];
 };
 
@@ -114,9 +120,29 @@ const fetchOrders = async()=> {
   return response.rows;
 };
 
+const createReview = async (review) => {
+  const SQL = `
+        INSERT INTO reviews (id, product_id, txt, rating)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+    `;
+  const response = await client.query(SQL, [review.id, review.product_id, review.txt, review.rating]);
+  return response.rows[0];
+};
+
+const fetchReviews = async () => {
+  const SQL = `
+        SELECT *
+        FROM reviews
+    `;
+  const response = await client.query(SQL);
+  return response.rows;
+};
+
 const seed = async()=> {
   const SQL = `
     DROP TABLE IF EXISTS line_items;
+    DROP TABLE IF EXISTS reviews;
     DROP TABLE IF EXISTS products;
     DROP TABLE IF EXISTS orders;
 
@@ -143,11 +169,20 @@ const seed = async()=> {
       CONSTRAINT product_and_order_key UNIQUE(product_id, order_id)
     );
 
+    CREATE TABLE reviews(
+      id UUID PRIMARY KEY,
+      product_id UUID,
+      txt TEXT,
+      rating INTEGER NOT NULL
+      );
+
+
+
   `;
   await client.query(SQL);
   const [foo, bar, bazz, quq] = await Promise.all([
-    createProduct({ name: 'foo', price: 100, description: 'text text' }),
-    createProduct({ name: 'bar', price: 200, description: 'text text' }),
+    createProduct(product={ name: 'foo', price: 100, description: 'text text' }, reviews=[{txt: "okay review", rating: 5}]),
+    createProduct(product = { name: 'bar', price: 200, description: 'text text' }, reviews = [{ txt: "meh review", rating: 3 }, { txt: "bad review", rating: 1 }]),
     createProduct({ name: 'bazz', price: 300, description: 'text text' }),
     createProduct({ name: 'quq', price: 400, description: 'text text' }),
   ]);
@@ -168,6 +203,8 @@ module.exports = {
   updateLineItem,
   deleteLineItem,
   updateOrder,
+  createProduct,
+  fetchReviews,
   seed,
   client
 };

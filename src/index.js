@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
-import { Link, HashRouter, Routes, Route } from 'react-router-dom';
+import { Link, HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Products from './Products';
 import Orders from './Orders';
 import Cart from './Cart';
+import Reviews from './Reviews'
 
 const App = ()=> {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [lineItems, setLineItems] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
-  useEffect(()=> {
-    const fetchData = async()=> {
+  let location = useLocation()
+
+  function fetchProducts() {
+    const fetchData = async () => {
       const response = await axios.get('/api/products');
       const sortedProducts = response.data.sort((a, b) => a.name.localeCompare(b.name));
       setProducts(response.data);
       setProducts(sortedProducts);
     };
     fetchData();
+  }
+
+  useEffect(()=> {
+    fetchProducts()
   }, []);
 
   useEffect(()=> {
@@ -33,6 +41,15 @@ const App = ()=> {
     const fetchData = async()=> {
       const response = await axios.get('/api/lineItems');
       setLineItems(response.data);
+    };
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get('/api/reviews');
+      console.log(response)
+      setReviews(response.data);
     };
     fetchData();
   }, []);
@@ -107,32 +124,41 @@ const App = ()=> {
         <Link to='/cart'>Cart ({cartCount })</Link>
       </nav>
 
-
-
-
-
       <div>
-        <Products
-          products={ products }
-          cartItems = { cartItems }
-          createLineItem = { createLineItem }
-          updateLineItem = { updateLineItem }
-        />
-        <Orders
-          orders = { orders }
-          products = { products }
-          lineItems = { lineItems }
-        />
-        <Cart
-          cart = { cart }
-          lineItems = { lineItems }
-          products = { products }
-          updateOrder = { updateOrder }
-          incrementQuantity = { updateLineItem }
-          decrementQuantity = { decrementQuantity }
-          cartTotal= { cartTotal }
-          removeFromCart = { removeFromCart }
-        />
+        {location.pathname === '/products' && (
+          <Products
+            products={products}
+            cartItems={cartItems}
+            createLineItem={createLineItem}
+            updateLineItem={updateLineItem}
+            fetchProducts={fetchProducts}
+          />
+        )}
+        {location.pathname === '/orders' && (
+          <Orders
+            orders={orders}
+            products={products}
+            lineItems={lineItems}
+          />
+        )}
+        {location.pathname === '/cart' && (
+          <Cart
+            cart={cart}
+            lineItems={lineItems}
+            products={products}
+            updateOrder={updateOrder}
+            incrementQuantity={updateLineItem}
+            decrementQuantity={decrementQuantity}
+            cartTotal={cartTotal}
+            removeFromCart={removeFromCart}
+          />
+        )}
+        {location.pathname === '/reviews' && (
+          <Reviews
+            reviews={reviews}
+            products={products}
+          />
+        )}
       </div>
     </div>
   );
