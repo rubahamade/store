@@ -181,10 +181,16 @@ const seed = async()=> {
   `;
   await client.query(SQL);
   const [foo, bar, bazz, quq] = await Promise.all([
-    createProduct(product={ name: 'foo', price: 100, description: 'text text' }, reviews=[{txt: "okay review", rating: 5}]),
-    createProduct(product = { name: 'bar', price: 200, description: 'text text' }, reviews = [{ txt: "meh review", rating: 3 }, { txt: "bad review", rating: 1 }]),
-    createProduct({ name: 'bazz', price: 300, description: 'text text' }),
-    createProduct({ name: 'quq', price: 400, description: 'text text' }),
+    createProduct(product={ name: 'foo', price: 100,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+    reviews=[{txt: "okay review", rating: 5}]),
+    createProduct(product = { name: 'bar', price: 200,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+    reviews = [{ txt: "meh review", rating: 3 }, { txt: "bad review", rating: 1 }]),
+    createProduct({ name: 'bazz', price: 300,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' }, reviews = [{ txt: "meh review", rating: 3 }, { txt: "bad review", rating: 1 }]),
+    createProduct({ name: 'quq', price: 400,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' }, reviews = [{ txt: "meh review", rating: 3 }, { txt: "bad review", rating: 1 }]),
   ]);
   let orders = await fetchOrders();
   let cart = orders.find(order => order.is_cart);

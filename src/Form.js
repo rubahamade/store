@@ -43,15 +43,36 @@ function CreateProductForm({ fetchProducts }) {
 
     return (
         <form onSubmit={handleCreate}>
+            <div className="label">
             <label>
-                Name: <input type="text" value={name} onChange={handleNameChange} /> 
+                Name:
+                <br/>
+                <input type="text" value={name} onChange={handleNameChange} /> 
             </label>
+            </div>
+
+            <br/>
+
+            <div className="label">
             <label>
-                Description: <input type="text" value={desc} onChange={handleDescChange} /> 
+                Description:
+                <br/>
+                <input type="text" value={desc} onChange={handleDescChange} /> 
             </label>
+            </div>
+
+            <br/>
+
+            <div>
             <label>
-                Price: <input type="text" value={price} onChange={handlePriceChange} />
+                Price: 
+                <br/>
+                <input type="text" value={price} onChange={handlePriceChange} />
             </label>
+            </div>
+
+            <br/>
+            
             <button>Create Product</button>
         </form>
     );

@@ -14,6 +14,7 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, fetchPr
               <li key={ product.id }>
                 { product.name } - ${product.price / 100}
                 <p>{product.description}</p>
+                
                 {
                   cartItem ? <button onClick={ ()=> updateLineItem(cartItem)}>Add Another</button>: <button onClick={ ()=> createLineItem(product)}>Add</button>
                 }
@@ -22,7 +23,11 @@ const Products = ({ products, cartItems, createLineItem, updateLineItem, fetchPr
           })
         }
       </ul>
+      <div className="createproduct">
+        <h3>Create New Product</h3>
       <CreateProductForm fetchProducts={fetchProducts} />
+      </div>
+      
     </div>
   );
 };

@@ -117,11 +117,12 @@ const App = ()=> {
 
 
   return (
-    <div>
+    <div className="container">
       <nav>
         <Link to='/products'>Products ({ products.length })</Link>
         <Link to='/orders'>Orders ({ orders.filter((order) => {return !order.is_cart}).length })</Link>
         <Link to='/cart'>Cart ({cartCount })</Link>
+        <Link to='/reviews'>Reviews</Link>
       </nav>
 
       <div>
