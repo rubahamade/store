@@ -35,7 +35,7 @@ function CreateProductForm({ fetchProducts }) {
     };
 
     const handlePriceChange = (event) => {
-        const value = event.target.value;
+        const value = event.target.value * 100;
         if (/^\d+$/.test(value)) {
             setPrice(value);
         }
@@ -50,7 +50,7 @@ function CreateProductForm({ fetchProducts }) {
                 Description: <input type="text" value={desc} onChange={handleDescChange} /> 
             </label>
             <label>
-                Price: <input type="text" value={price} onChange={handlePriceChange} /> 
+                Price: <input type="text" value={price} onChange={handlePriceChange} />
             </label>
             <button>Create Product</button>
         </form>
